@@ -60,7 +60,7 @@ const Tooltip: React.FC<TooltipProps> = ({ children }) => {
     >
       {React.Children.map(children, (child) =>
         React.isValidElement(child)
-          ? React.cloneElement(child as React.ReactElement, { show })
+          ? React.cloneElement(child as any, { show })
           : child
       )}
     </div>
