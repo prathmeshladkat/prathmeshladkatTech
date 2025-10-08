@@ -3,7 +3,22 @@ import { Button } from "./ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Github, Globe } from "lucide-react";
 
-const ProjectCard = ({ project }) => {
+// Define the Project type
+type ProjectType = {
+  name: string;
+  year: string;
+  description: string;
+  techStack: string[];
+  websiteUrl?: string;
+  sourceUrl?: string;
+};
+
+// Define props type for ProjectCard
+type ProjectCardProps = {
+  project: ProjectType;
+};
+
+const ProjectCard = ({ project }: ProjectCardProps) => {
   return (
     <Card className="w-[305px] min-h-[260px] flex flex-col border rounded-2xl overflow-hidden bg-background">
       {/* HEADER */}
@@ -24,7 +39,7 @@ const ProjectCard = ({ project }) => {
           </p>
 
           <div className="flex flex-wrap gap-1 mt-1">
-            {project.techStack.map((tech, index) => (
+            {project.techStack.map((tech: string, index: number) => (
               <Badge
                 key={index}
                 variant="secondary"
@@ -78,12 +93,12 @@ const ProjectCard = ({ project }) => {
 };
 
 const Project = () => {
-  const projects = [
+  const projects: ProjectType[] = [
     {
       name: "LogWatcher",
       year: "2025",
       description:
-        "Built LogWatcher – a production-grade log monitoring system simulating real-world observability pipelines. Designed end-to-end using Kafka, Elasticsearch, and WebSockets for real-time log streaming and search. Achieved scalable ingestion of high-volume logs with efficient parsing and indexing.",
+        "Built LogWatcher — a production-grade log monitoring system simulating real-world observability pipelines. Designed end-to-end using Kafka, Elasticsearch, and WebSockets for real-time log streaming and search. Achieved scalable ingestion of high-volume logs with efficient parsing and indexing.",
       techStack: [
         "Next.js",
         "Tailwind CSS",
@@ -146,7 +161,7 @@ const Project = () => {
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 justify-items-center max-w-[640px] mx-auto">
-          {projects.map((project, index) => (
+          {projects.map((project: ProjectType, index: number) => (
             <ProjectCard key={index} project={project} />
           ))}
         </div>
