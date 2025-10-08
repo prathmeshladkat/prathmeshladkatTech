@@ -9,8 +9,19 @@ import {
   Moon,
 } from "lucide-react";
 
-// Mock components - replace with your actual shadcn components
-const Button = ({ children, className, variant, size, ...props }) => (
+// ----------------------------------------
+// Mock components (replace with shadcn/ui in production)
+
+type ButtonProps = {
+  className?: string;
+  variant?: string;
+  size?: string;
+  onClick?: () => void;
+  "aria-label"?: string;
+  children: React.ReactNode;
+};
+
+const Button: React.FC<ButtonProps> = ({ children, className, ...props }) => (
   <button
     className={`inline-flex items-center justify-center ${className}`}
     {...props}
@@ -19,7 +30,15 @@ const Button = ({ children, className, variant, size, ...props }) => (
   </button>
 );
 
-const Separator = ({ orientation, className }) => (
+type SeparatorProps = {
+  orientation?: "vertical" | "horizontal";
+  className?: string;
+};
+
+const Separator: React.FC<SeparatorProps> = ({
+  orientation = "horizontal",
+  className = "",
+}) => (
   <div
     className={`${
       orientation === "vertical" ? "w-px h-full" : "h-px w-full"
@@ -27,7 +46,11 @@ const Separator = ({ orientation, className }) => (
   />
 );
 
-const Tooltip = ({ children }) => {
+type TooltipProps = {
+  children: React.ReactNode;
+};
+
+const Tooltip: React.FC<TooltipProps> = ({ children }) => {
   const [show, setShow] = useState(false);
   return (
     <div
@@ -36,50 +59,75 @@ const Tooltip = ({ children }) => {
       className="relative"
     >
       {React.Children.map(children, (child) =>
-        React.cloneElement(child, { show })
+        React.isValidElement(child)
+          ? React.cloneElement(child as React.ReactElement, { show })
+          : child
       )}
     </div>
   );
 };
 
-const TooltipTrigger = ({ children, show }) => children;
+type TooltipTriggerProps = {
+  children: React.ReactNode;
+  show?: boolean;
+};
 
-const TooltipContent = ({ children, show }) =>
+const TooltipTrigger: React.FC<TooltipTriggerProps> = ({ children }) => (
+  <>{children}</>
+);
+
+type TooltipContentProps = {
+  children: React.ReactNode;
+  show?: boolean;
+};
+
+const TooltipContent: React.FC<TooltipContentProps> = ({ children, show }) =>
   show ? (
     <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 px-2 py-1 bg-gray-900 text-white text-xs rounded whitespace-nowrap">
       {children}
     </div>
   ) : null;
 
-// Dock Components (simplified version)
-const Dock = ({ children, className = "" }) => {
-  return (
-    <div
-      className={`mx-auto mt-8 flex h-[58px] w-max items-center justify-center gap-2 rounded-2xl border border-gray-200 dark:border-gray-800 p-2 backdrop-blur-md bg-white/80 dark:bg-black/80 ${className}`}
-    >
-      {children}
-    </div>
-  );
+// ----------------------------------------
+// Dock Components
+// ----------------------------------------
+
+type DockProps = {
+  children: React.ReactNode;
+  className?: string;
 };
 
-const DockIcon = ({ children, className = "" }) => {
-  return (
-    <div
-      className={`flex aspect-square cursor-pointer items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors p-2 ${className}`}
-    >
-      {children}
-    </div>
-  );
+const Dock: React.FC<DockProps> = ({ children, className = "" }) => (
+  <div
+    className={`mx-auto mt-8 flex h-[58px] w-max items-center justify-center gap-2 rounded-2xl border border-gray-200 dark:border-gray-800 p-2 backdrop-blur-md bg-white/80 dark:bg-black/80 ${className}`}
+  >
+    {children}
+  </div>
+);
+
+type DockIconProps = {
+  children: React.ReactNode;
+  className?: string;
 };
 
+const DockIcon: React.FC<DockIconProps> = ({ children, className = "" }) => (
+  <div
+    className={`flex aspect-square cursor-pointer items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors p-2 ${className}`}
+  >
+    {children}
+  </div>
+);
+
+// ----------------------------------------
 // Theme Toggle Component
-const ThemeToggle = () => {
-  const [theme, setTheme] = useState("light");
+// ----------------------------------------
+
+const ThemeToggle: React.FC = () => {
+  const [theme, setTheme] = useState<"light" | "dark">("light");
 
   const toggleTheme = () => {
     const newTheme = theme === "light" ? "dark" : "light";
     setTheme(newTheme);
-    // In your real app, this would call your theme provider's setTheme function
     document.documentElement.classList.toggle("dark");
   };
 
@@ -90,7 +138,7 @@ const ThemeToggle = () => {
           onClick={toggleTheme}
           variant="ghost"
           size="icon"
-          className="size-12 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
+          className="size-10 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
           aria-label="Toggle theme"
         >
           {theme === "light" ? (
@@ -107,7 +155,10 @@ const ThemeToggle = () => {
   );
 };
 
-// Main Dock Demo Component
+// ----------------------------------------
+// Main Dock Navbar Component
+// ----------------------------------------
+
 export default function DockNavbar() {
   const navItems = [
     { href: "#", icon: Home, label: "Home" },
@@ -127,6 +178,7 @@ export default function DockNavbar() {
   return (
     <div className="flex flex-col items-center justify-center">
       <Dock>
+        {/* Navigation Icons */}
         {navItems.map((item) => (
           <DockIcon key={item.label}>
             <Tooltip>
@@ -134,7 +186,7 @@ export default function DockNavbar() {
                 <a
                   href={item.href}
                   aria-label={item.label}
-                  className="size-10  rounded-full flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                  className="size-10 rounded-full flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                 >
                   <item.icon className="size-3 text-gray-700 dark:text-gray-300" />
                 </a>
@@ -148,6 +200,7 @@ export default function DockNavbar() {
 
         <Separator orientation="vertical" className="h-full py-2" />
 
+        {/* Social Links */}
         {socialLinks.map((social) => (
           <DockIcon key={social.name}>
             <Tooltip>
@@ -167,6 +220,7 @@ export default function DockNavbar() {
           </DockIcon>
         ))}
 
+        {/* Theme Toggle */}
         <DockIcon>
           <ThemeToggle />
         </DockIcon>

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import React from "react";
 
 const About = () => {
@@ -24,8 +25,10 @@ const About = () => {
 
         {/* Profile Image */}
         <div className="flex-shrink-0">
-          <img
-            src="mine1.jpg"
+          <Image
+            width={"200"}
+            height={"200"}
+            src="/mine1.jpg"
             alt="Profile"
             className="w-28 h-28 rounded-full object-cover"
           />

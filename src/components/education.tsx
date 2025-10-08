@@ -1,3 +1,4 @@
+import Image from "next/image";
 import React from "react";
 
 const EducationSkills = () => {
@@ -39,8 +40,10 @@ const EducationSkills = () => {
         >
           {/* University Logo */}
           <div className="flex-shrink-0">
-            <img
-              src={education.logo}
+            <Image
+              width={"64"}
+              height={"64"}
+              src="/collee.jpg"
               alt={education.university}
               className="w-12 h-12 rounded-lg object-cover"
             />
