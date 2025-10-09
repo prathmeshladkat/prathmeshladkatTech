@@ -11,6 +11,7 @@ type ProjectType = {
   techStack: string[];
   websiteUrl?: string;
   sourceUrl?: string;
+  status?: "ongoing" | "completed";
 };
 
 // Define props type for ProjectCard
@@ -23,12 +24,24 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
     <Card className="w-[305px] min-h-[260px] flex flex-col border rounded-2xl overflow-hidden bg-background">
       {/* HEADER */}
       <CardHeader className="py-2 px-3">
-        <CardTitle className="text-base font-semibold text-left leading-tight mb-0">
-          {project.name}
-        </CardTitle>
-        <p className="text-[11px] text-muted-foreground text-left mt-0">
-          {project.year}
-        </p>
+        <div className="flex items-start justify-between gap-2">
+          <div className="flex-1">
+            <CardTitle className="text-base font-semibold text-left leading-tight mb-0">
+              {project.name}
+            </CardTitle>
+            <p className="text-[11px] text-muted-foreground text-left mt-0">
+              {project.year}
+            </p>
+          </div>
+          {project.status === "ongoing" && (
+            <Badge
+              variant="default"
+              className="text-[10px] font-medium px-2 py-0.5 bg-green-500 hover:bg-green-600 text-white shrink-0"
+            >
+              Ongoing
+            </Badge>
+          )}
+        </div>
       </CardHeader>
 
       {/* CONTENT */}
@@ -109,6 +122,7 @@ const Project = () => {
       ],
       websiteUrl: "https://github.com/prathmeshladkat/LogWatcher",
       sourceUrl: "https://github.com/prathmeshladkat/LogWatcher",
+      status: "completed",
     },
     {
       name: "Notification-microservice",
@@ -119,6 +133,7 @@ const Project = () => {
       websiteUrl:
         "https://github.com/prathmeshladkat/notification-microservice",
       sourceUrl: "https://github.com/prathmeshladkat/notification-microservice",
+      status: "completed",
     },
     {
       name: "BizzyBee",
@@ -128,6 +143,7 @@ const Project = () => {
       techStack: ["React.js", "MongoDB", "Node.js", "AWS EC2"],
       websiteUrl: "https://bizzybee.co.in/",
       sourceUrl: "https://github.com/prathmeshladkat/BizzyBee-Backend",
+      status: "completed",
     },
     {
       name: "Dentalist",
@@ -137,6 +153,7 @@ const Project = () => {
       techStack: ["Next.js", "TypeScript", "Solidity", "Monad Blockchain"],
       websiteUrl: "#",
       sourceUrl: "#",
+      status: "ongoing",
     },
   ];
 
