@@ -164,8 +164,8 @@ const ThemeToggle: React.FC = () => {
 
 export default function DockNavbar() {
   const navItems = [
-    { href: "#", icon: Home, label: "Home" },
-    { href: "#", icon: PenTool, label: "Blog" },
+    { href: "/", icon: Home, label: "Home" },
+    { href: "/blog", icon: PenTool, label: "Blog" },
   ];
 
   const socialLinks = [
