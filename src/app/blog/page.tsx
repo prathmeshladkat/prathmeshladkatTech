@@ -4,6 +4,7 @@ import DockNavbar from "@/components/navbar";
 import { posts, sidebarLinks } from "@/data/blog"; // ← your data file
 import { cn } from "@/lib/utils";
 import { CalendarDays, ExternalLink, List, Search } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
 
 export default function BlogPage() {
@@ -22,9 +23,9 @@ export default function BlogPage() {
       <aside className="hidden lg:flex flex-col w-[240px] shrink-0 border-r border-[#2d2f34] h-screen sticky top-0 overflow-y-auto">
         {/* Logo */}
         <div className="px-5 py-5 border-b border-[#2d2f34]">
-          <a href="/" className="text-white font-bold text-base tracking-tight block">
+          <Link href="/" className="text-white font-bold text-base tracking-tight block">
             Prathmesh&apos;s Notes
-          </a>
+          </Link>
         </div>
 
         {/* Search */}
