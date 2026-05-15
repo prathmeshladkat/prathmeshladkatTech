@@ -1,5 +1,20 @@
 // data.ts — paste your blog content here, import in page.tsx
 
+export type InlineImage = {
+  id: string;
+  src: string;          // path or URL to the image
+  alt: string;          // alt text
+  caption?: string;     // optional caption below the image
+  afterBullet?: number; // same positioning logic as notes
+};
+
+export type InlineNote = {
+  id: string;
+  label: string;       // the one-liner shown collapsed, e.g. "📝 What is indexing?"
+  content: string;     // the full explanation shown when expanded
+  afterBullet?: number; // insert after bullet index (0-based). omit = after body text
+};
+
 export type Post = {
   slug: string;
   title: string;
@@ -13,6 +28,8 @@ export type Post = {
     heading: string;
     body: string;
     bullets?: string[];
+    notes?: InlineNote[];   // ← expandable notes
+    images?: InlineImage[]; // ← inline images
   }[];
 };
 
@@ -34,6 +51,15 @@ export const posts: Post[] = [
           "Adding more consumers than partitions leaves some consumers idle.",
           "Each group maintains its own set of offsets independently.",
         ],
+        notes: [
+          {
+            id: "what-is-partition",
+            label: "📝 What is a partition?",
+            content:
+              "A partition is an ordered, immutable sequence of records that is continually appended to. Think of it like a commit log. Kafka topics are split into N partitions — this is how Kafka achieves parallelism. More partitions = more throughput potential, but also more overhead. Each partition lives on a broker and can be replicated across others for fault tolerance.",
+            afterBullet: 0, // appears after the first bullet
+          },
+        ],
       },
       {
         heading: "Offsets as a recovery map",
@@ -51,6 +77,15 @@ export const posts: Post[] = [
           "Rebalances are normal, but slow processing makes them painful.",
           "Tune max.poll.interval.ms to match your actual processing time.",
           "Cooperative rebalancing (incremental) reduces stop-the-world pauses in newer Kafka clients.",
+        ],
+        notes: [
+          {
+            id: "what-is-heartbeat",
+            label: "📝 What is a heartbeat in Kafka?",
+            content:
+              "Consumers send periodic heartbeats to the group coordinator broker to signal they're alive. If the coordinator doesn't receive a heartbeat within session.timeout.ms, it considers the consumer dead and triggers a rebalance. The heartbeat thread runs in the background — separate from your poll loop — which is why a slow poll() (blocking on processing) can cause missed heartbeats and unintended rebalances.",
+            // no afterBullet = note appears right after the body text, before bullets
+          },
         ],
       },
     ],
@@ -72,6 +107,24 @@ export const posts: Post[] = [
           "Parse logs before indexing so search stays useful.",
           "Use structured log formats (JSON) at the source when you control the emitter.",
           "A regex-based fallback parser handles legacy services.",
+        ],
+        notes: [
+          {
+            id: "what-is-indexing",
+            label: "📝 What does indexing mean in Elasticsearch?",
+            content:
+              "Indexing is the act of storing a document in Elasticsearch so it can be searched. When you index a document, ES breaks its text into tokens (via an analyzer), stores them in an inverted index — a map from token → list of documents — and makes them queryable in near real-time (about 1 second by default). Without structured fields, you'd be searching across one big string blob, losing the ability to filter by level:error or service:auth efficiently.",
+            afterBullet: 0,
+          },
+        ],
+        images: [
+          {
+            id: "log-pipeline-arch",
+            src: "/images/log-pipeline.png", // replace with your actual image path
+            alt: "LogWatcher pipeline architecture diagram",
+            caption: "Figure 1 — Log ingestion pipeline: Kafka → Parser → Elasticsearch → WebSocket",
+            // no afterBullet = appears before bullets, after body text
+          },
         ],
       },
       {
